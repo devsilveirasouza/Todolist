@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "typescript": "^5.2.2"
+  },
+  "name": "todolist",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "build": "npx tsc -w"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
