@@ -43,7 +43,7 @@
             this.notifications = notifications;
         }
         Reminder.prototype.render = function () {
-            return "\n        ---> Reminder <--- \n\n        description: ".concat(this.description, " \n\n        date: ").concat(DateUtils.formatDate(this.date), " \n\n        platform: ").concat(this.notifications.join(","), "\n        ");
+            return "\n      ---> Reminder <--- \n\n      Description: ".concat(this.description, " \n\n      Notify by ").concat(this.notifications.join(" and "), " in ").concat(DateUtils.formatDate(this.date), " \n\n      Created: ").concat(DateUtils.formatDate(this.dateCreated), " Last Update: ").concat(DateUtils.formatDate(this.dateUpdated), "\n      ");
         };
         return Reminder;
     }());
@@ -57,14 +57,11 @@
             this.description = description;
         }
         Todo.prototype.render = function () {
-            return "\n        ---> TODO <---\n        description: ".concat(this.description, "\n        done: ").concat(this.done, "\n      ");
+            var doneLabel = this.done ? "Completed" : "In Progress";
+            return "\n      ---> TODO <---\n      Description: ".concat(this.description, " \n\n      Status: ").concat(doneLabel, " \n\n      Created: ").concat(DateUtils.formatDate(this.dateCreated), " Last Updated: ").concat(DateUtils.formatDate(this.dateUpdated), "\n      ");
         };
         return Todo;
     }());
-    var todo = new Todo("Todo criado com a classe");
-    var reminder = new Reminder("Reminder criado com a classe", new Date(), [
-        NotificationPlatform.EMAIL,
-    ]);
     var taskView = {
         getTodo: function (form) {
             var todoDescription = form.todoDescription.value;
@@ -73,9 +70,10 @@
         },
         getReminder: function (form) {
             var reminderNotifications = [
-                form.notifications.value,
+                form.notification.value,
+                // form.notifications.value as NotificationPlatform,
             ];
-            var reminderDate = new Date(form.reminderDate.value);
+            var reminderDate = new Date(form.scheduleDate.value);
             var reminderDescription = form.reminderDescription.value;
             form.reset();
             return new Reminder(reminderDescription, reminderDate, reminderNotifications);
@@ -100,13 +98,13 @@
                 todoSet === null || todoSet === void 0 ? void 0 : todoSet.setAttribute("style", "display: block");
                 todoSet === null || todoSet === void 0 ? void 0 : todoSet.removeAttribute("disabled");
                 reminderSet === null || reminderSet === void 0 ? void 0 : reminderSet.setAttribute("style", "display: none");
-                reminderSet === null || reminderSet === void 0 ? void 0 : reminderSet.removeAttribute("disabled");
+                reminderSet === null || reminderSet === void 0 ? void 0 : reminderSet.setAttribute("disabled", "true");
             }
             else {
                 reminderSet === null || reminderSet === void 0 ? void 0 : reminderSet.setAttribute("style", "display: block");
                 reminderSet === null || reminderSet === void 0 ? void 0 : reminderSet.removeAttribute("disabled");
                 todoSet === null || todoSet === void 0 ? void 0 : todoSet.setAttribute("style", "display: none");
-                todoSet === null || todoSet === void 0 ? void 0 : todoSet.removeAttribute("disabled");
+                todoSet === null || todoSet === void 0 ? void 0 : todoSet.setAttribute("disabled", "true");
             }
         },
     };

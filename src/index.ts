@@ -29,7 +29,6 @@
   const UUID = (): string => {
     return Math.random().toString(36).substr(2, 9);
   };
-
   // Interfaces
   interface Task {
     id: string;
@@ -60,11 +59,15 @@
 
     render(): string {
       return `
-        ---> Reminder <--- \n
-        description: ${this.description} \n
-        date: ${DateUtils.formatDate(this.date)} \n
-        platform: ${this.notifications.join(",")}
-        `;
+      ---> Reminder <--- \n
+      Description: ${this.description} \n
+      Notify by ${this.notifications.join(" and ")} in ${DateUtils.formatDate(
+        this.date
+      )} \n
+      Created: ${DateUtils.formatDate(
+        this.dateCreated
+      )} Last Update: ${DateUtils.formatDate(this.dateUpdated)}
+      `;
     }
   }
 
@@ -81,19 +84,17 @@
     }
 
     render(): string {
+      const doneLabel = this.done ? "Completed" : "In Progress";
       return `
-        ---> TODO <---
-        description: ${this.description}
-        done: ${this.done}
+      ---> TODO <---
+      Description: ${this.description} \n
+      Status: ${doneLabel} \n
+      Created: ${DateUtils.formatDate(
+        this.dateCreated
+      )} Last Updated: ${DateUtils.formatDate(this.dateUpdated)}
       `;
     }
   }
-
-  const todo = new Todo("Todo criado com a classe");
-
-  const reminder = new Reminder("Reminder criado com a classe", new Date(), [
-    NotificationPlatform.EMAIL,
-  ]);
 
   const taskView = {
     getTodo(form: HTMLFormElement): Todo {
@@ -103,9 +104,10 @@
     },
     getReminder(form: HTMLFormElement): Reminder {
       const reminderNotifications = [
-        form.notifications.value as NotificationPlatform,
+        form.notification.value as NotificationPlatform,
+        // form.notifications.value as NotificationPlatform,
       ];
-      const reminderDate = new Date(form.reminderDate.value);
+      const reminderDate = new Date(form.scheduleDate.value);
       const reminderDescription = form.reminderDescription.value;
       form.reset();
       return new Reminder(
@@ -135,12 +137,12 @@
         todoSet?.setAttribute("style", "display: block");
         todoSet?.removeAttribute("disabled");
         reminderSet?.setAttribute("style", "display: none");
-        reminderSet?.removeAttribute("disabled");
+        reminderSet?.setAttribute("disabled", "true");
       } else {
         reminderSet?.setAttribute("style", "display: block");
         reminderSet?.removeAttribute("disabled");
         todoSet?.setAttribute("style", "display: none");
-        todoSet?.removeAttribute("disabled");
+        todoSet?.setAttribute("disabled", "true");
       }
     },
   };
